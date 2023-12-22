@@ -10,8 +10,10 @@
             <input class="form-control"
                    formControlName="name"
                    placeholder="Nombre de la persona">
-            <span class="form-text text-danger">
-                   error message
+            <span 
+                *ngIf="isValidField('name')"
+                class="form-text text-danger">
+                   {{ getFieldError('name')}}
             </span>
         </div>
     </div>
@@ -44,15 +46,16 @@
 
                 <div class="input-group">
                     <input 
-                        class="form-control"
-                        [formControlName]="i">
+                    [formControlName]="i"
+                    class="form-control">
 
                     <button class="btn btn-outline-danger"
                             type="button">
                       Eliminar
                   </button>
                 </div>
-                <span class="form-text text-danger">
+                <span 
+                    class="form-text text-danger">
                    Este campo es requerido
                 </span>
 
