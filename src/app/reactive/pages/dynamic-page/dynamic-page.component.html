@@ -13,7 +13,7 @@
             <span 
                 *ngIf="isValidField('name')"
                 class="form-text text-danger">
-                   {{ getFieldError('name')}}
+                {{ getFieldError('name')}}
             </span>
         </div>
     </div>
@@ -24,12 +24,15 @@
         <div class="col-sm-9">
 
             <div class="input-group">
-                <input class="form-control"
-                       placeholder="Agregar favorito">
-
-
-                <button class="btn btn-outline-primary"
-                        type="button">
+                <input 
+                    class="form-control"
+                    [formControl]="newFavorite"
+                    placeholder="Agregar favorito"
+                >
+                <button 
+                    (click)="addFavorite()"
+                    class="btn btn-outline-primary"
+                    type="button">
                     Agregar favorito
                 </button>
             </div>
@@ -46,15 +49,18 @@
 
                 <div class="input-group">
                     <input 
-                    [formControlName]="i"
-                    class="form-control">
+                        [formControlName]="i"
+                        class="form-control">
 
-                    <button class="btn btn-outline-danger"
-                            type="button">
+                    <button 
+                        (click)="onDeleteFav(i)"
+                        class="btn btn-outline-danger"
+                        type="button">
                       Eliminar
                   </button>
                 </div>
                 <span 
+                    *ngIf="isValidFieldInArray(favoriteGames, i)"
                     class="form-text text-danger">
                    Este campo es requerido
                 </span>
@@ -83,13 +89,13 @@
 
 
 <span>Valid</span>
-<pre>{{ 'object' | json }}</pre>
+<pre>{{ dynamicForm.valid | json }}</pre>
 <br>
 
 <span>Value</span>
-<pre>{{ 'object' | json }}</pre>
+<pre>{{ dynamicForm.value| json }}</pre>
 <br>
 
 <span>Agregar Juego</span>
-<pre>{{ 'object' | json }}</pre>
-<pre>{{ 'object' | json }}</pre>
+<pre>{{ newFavorite.valid| json }}</pre>
+<pre>{{ newFavorite.valid | json }}</pre>

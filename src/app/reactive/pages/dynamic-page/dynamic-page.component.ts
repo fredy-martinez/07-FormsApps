@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   templateUrl: './dynamic-page.component.html',
@@ -7,8 +7,6 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
   ]
 })
 export class DynamicPageComponent {
-
-  constructor( private fb: FormBuilder){}
 
   //Declaro el reactive form con sus validaciones
   public dynamicForm: FormGroup = this.fb.group({
@@ -19,10 +17,14 @@ export class DynamicPageComponent {
     ]),
   })
 
+  public newFavorite: FormControl = new FormControl('', Validators.required)
+
   //Getter para obtener favorite games
   get favoriteGames(){
     return this.dynamicForm.get('favoriteGames') as FormArray;
   }
+
+  constructor( private fb: FormBuilder){}
 
   //Getter del error
   getFieldError( field: string): string | null{
@@ -44,17 +46,33 @@ export class DynamicPageComponent {
     return null;
   }
   
-    //Validación
-    isValidField( field: string): boolean | null {
-      return this.dynamicForm.controls[field].errors && this.dynamicForm.controls[field].touched;
-    }
+  //Validación
+  isValidField( field: string): boolean | null {
+    return this.dynamicForm.controls[field].errors && this.dynamicForm.controls[field].touched;
+  }
 
-    //Validación del arreglo
-    isValidFieldInArray( formArray: FormArray, i: number){
-      return formArray.controls[i].errors 
-          && formArray.controls[i].touched;
+  //Validación del arreglo
+  isValidFieldInArray( formArray: FormArray, i: number){
+    return formArray.controls[i].errors 
+        && formArray.controls[i].touched;
+  }
 
-    }
+  addFavorite(): void {
+    if (this.newFavorite.invalid) return;
+
+    const newGame = this.newFavorite.value;
+
+    this.favoriteGames.push(
+      this.fb.control( newGame, Validators.required)
+    );
+
+    this.newFavorite.reset();
+    
+  }
+
+  onDeleteFav(i :number): void{
+    this.favoriteGames.removeAt(i);
+  }
 
 
   onSubmit(): void{
@@ -66,6 +84,7 @@ export class DynamicPageComponent {
     }
 
     console.log( this.dynamicForm.value);
+    (this.dynamicForm.controls['favoriteGames'] as FormArray) = this.fb.array([]);
 
     this.dynamicForm.reset();
   }
